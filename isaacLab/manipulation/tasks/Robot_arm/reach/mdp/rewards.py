@@ -1,4 +1,4 @@
-# Copyright (c) 2022-2024, The Isaac Lab Project Developers.
+# Copyright (c) 2022-2025, The Isaac Lab Project Developers.
 # All rights reserved.
 #
 # SPDX-License-Identifier: BSD-3-Clause
@@ -10,45 +10,11 @@ from typing import TYPE_CHECKING
 
 from isaaclab.assets import RigidObject
 from isaaclab.managers import SceneEntityCfg
-from isaaclab.sensors import FrameTransformer
 from isaaclab.utils.math import combine_frame_transforms, quat_error_magnitude, quat_mul
 
 if TYPE_CHECKING:
     from isaaclab.envs import ManagerBasedRLEnv
 
-
-def object_is_lifted(
-    env: ManagerBasedRLEnv, minimal_height: float, object_cfg: SceneEntityCfg = SceneEntityCfg("object")
-) -> torch.Tensor:
-    """Reward the agent for lifting the object above the minimal height."""
-    object: RigidObject = env.scene[object_cfg.name]
-    return torch.where(object.data.root_pos_w[:, 2] > minimal_height, 1.0, 0.0)
-
-
-def object_ee_distance(
-    env: ManagerBasedRLEnv,
-    std: float,
-    object_cfg: SceneEntityCfg = SceneEntityCfg("object"),
-    ee_frame_cfg: SceneEntityCfg = SceneEntityCfg("ee_frame"),
-) -> torch.Tensor:
-    """Reward the agent for reaching the object using tanh-kernel."""
-    # extract the used quantities (to enable type-hinting)
-    object: RigidObject = env.scene[object_cfg.name]
-    ee_frame: FrameTransformer = env.scene[ee_frame_cfg.name]
-    ee_fingertips_w = ee_frame.data.target_pos_w[..., 1:, :]
-    
-    ee_pos = ee_frame.data.target_pos_w[..., 0, :]
-    lfinger_pos = ee_fingertips_w[..., 0, :]
-    rfinger_pos = ee_fingertips_w[..., 1, :]
-    cube_pos_w = object.data.root_pos_w
-
-    
-    lf_dist = torch.norm(lfinger_pos - cube_pos_w, dim=1)
-    rf_dist = torch.norm(rfinger_pos - cube_pos_w, dim=1)
-    ee_dist = torch.norm(ee_pos - cube_pos_w, dim=1)
-
-    return 1 - torch.tanh( ((lf_dist + rf_dist + ee_dist) / 3) / std) 
-        
 
 def position_command_error(env: ManagerBasedRLEnv, command_name: str, asset_cfg: SceneEntityCfg) -> torch.Tensor:
     """Penalize tracking of the position error using L2-norm.

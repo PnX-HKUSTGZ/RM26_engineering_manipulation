@@ -1,4 +1,4 @@
-# Copyright (c) 2022-2024, The Isaac Lab Project Developers.
+# Copyright (c) 2022-2025, The Isaac Lab Project Developers.
 # All rights reserved.
 #
 # SPDX-License-Identifier: BSD-3-Clause
@@ -7,10 +7,8 @@ import math
 
 from isaaclab.utils import configclass
 
-#import isaaclab_tasks.manager_based.manipulation.reach.mdp as mdp
-import isaacLab.manipulation.tasks.Robot_arm.reach.mdp as mdp
-from isaacLab.manipulation.tasks.Robot_arm.reach.reach_env_cfg import ReachEnvCfg
-#from isaaclab_tasks.manager_based.manipulation.reach.reach_env_cfg import ReachEnvCfg
+import isaaclab_tasks.manager_based.manipulation.reach.mdp as mdp
+from isaaclab_tasks.manager_based.manipulation.reach.reach_env_cfg import ReachEnvCfg
 
 ##
 # Pre-defined configs

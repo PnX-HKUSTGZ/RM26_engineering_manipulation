@@ -1,14 +1,11 @@
-# Copyright (c) 2022-2024, The Isaac Lab Project Developers.
+# Copyright (c) 2022-2025, The Isaac Lab Project Developers.
 # All rights reserved.
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
 from isaaclab.utils import configclass
 
-#import isaacLab.manipulation.tasks.Robot_arm.reach.mdp as mdp
-import isaacLab.manipulation.tasks.Dextrous_hand.inhand.mdp as mdp
-import isaacLab.manipulation.tasks.Dextrous_hand.inhand.inhand_env_cfg as inhand_env_cfg
-#import isaaclab_tasks.manager_based.manipulation.inhand.inhand_env_cfg as inhand_env_cfg
+import isaaclab_tasks.manager_based.manipulation.inhand.inhand_env_cfg as inhand_env_cfg
 
 ##
 # Pre-defined configs

@@ -7,8 +7,8 @@ import math
 
 from isaaclab.utils import configclass
 
-#import isaaclab_tasks.manager_based.manipulation.reach.mdp as mdp
-import isaacLab.manipulation.tasks.Robot_arm.reach.mdp as mdp
+import isaaclab_tasks.manager_based.manipulation.reach.mdp as mdp
+#import isaacLab.manipulation.tasks.Robot_arm.reach.mdp as mdp
 from isaacLab.manipulation.tasks.Robot_arm.reach.reach_env_cfg import ReachEnvCfg
 #from isaaclab_tasks.manager_based.manipulation.reach.reach_env_cfg import ReachEnvCfg
 

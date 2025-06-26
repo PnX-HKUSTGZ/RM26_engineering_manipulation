@@ -1,4 +1,4 @@
-# Copyright (c) 2022-2024, The Isaac Lab Project Developers.
+# Copyright (c) 2022-2025, The Isaac Lab Project Developers.
 # All rights reserved.
 #
 # SPDX-License-Identifier: BSD-3-Clause
@@ -23,7 +23,7 @@ from isaaclab.utils import configclass
 from isaaclab.utils.assets import ISAAC_NUCLEUS_DIR
 from isaaclab.utils.noise import AdditiveGaussianNoiseCfg as Gnoise
 
-import isaacLab.manipulation.tasks.Dextrous_hand.inhand.mdp as mdp
+import isaaclab_tasks.manager_based.manipulation.inhand.mdp as mdp
 
 ##
 # Scene definition
@@ -341,5 +341,6 @@ class InHandObjectEnvCfg(ManagerBasedRLEnvCfg):
         self.episode_length_s = 20.0
         # simulation settings
         self.sim.dt = 1.0 / 120.0
+        self.sim.render_interval = self.decimation
         # change viewer settings
         self.viewer.eye = (2.0, 2.0, 2.0)

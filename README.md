@@ -131,7 +131,7 @@ python3 scripts/rsl_rl/play.py --task Template-Isaac-Reach-Kinova-Play-v0--num_e
 python3 scripts/rsl_rl/play.py --task Template-Isaac-Reach-Franka-Play-v0 --num_envs 16
 ```
 ```bash
-python3 scripts/rsl_rl/play.py --task Template-Isaac-Reach-Franka-Play-v0 --num_envs 16
+python3 scripts/rsl_rl/play.py --task Template-Isaac-Reach-UR10-Play-v0 --num_envs 16
 ```
 5.2 Dextrous Hand
 ```bash
