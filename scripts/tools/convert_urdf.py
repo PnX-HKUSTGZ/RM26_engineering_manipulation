@@ -1,4 +1,4 @@
-# Copyright (c) 2022-2024, The Isaac Lab Project Developers.
+# Copyright (c) 2022-2025, The Isaac Lab Project Developers.
 # All rights reserved.
 #
 # SPDX-License-Identifier: BSD-3-Clause
@@ -9,10 +9,10 @@ Utility to convert a URDF into USD format.
 Unified Robot Description Format (URDF) is an XML file format used in ROS to describe all elements of
 a robot. For more information, see: http://wiki.ros.org/urdf
 
-This script uses the URDF importer extension from Isaac Sim (``omni.isaac.urdf_importer``) to convert a
+This script uses the URDF importer extension from Isaac Sim (``isaacsim.asset.importer.urdf``) to convert a
 URDF asset into USD format. It is designed as a convenience script for command-line use. For more
 information on the URDF importer, see the documentation for the extension:
-https://docs.omniverse.nvidia.com/app_isaacsim/app_isaacsim/ext_omni_isaac_urdf.html
+https://docs.isaacsim.omniverse.nvidia.com/latest/robot_setup/ext_isaacsim_asset_importer_urdf.html
 
 
 positional arguments:
@@ -23,7 +23,9 @@ optional arguments:
   -h, --help                Show this help message and exit
   --merge-joints            Consolidate links that are connected by fixed joints. (default: False)
   --fix-base                Fix the base to where it is imported. (default: False)
-  --make-instanceable       Make the asset instanceable for efficient cloning. (default: False)
+  --joint-stiffness         The stiffness of the joint drive. (default: 100.0)
+  --joint-damping           The damping of the joint drive. (default: 1.0)
+  --joint-target-type       The type of control to use for the joint drive. (default: "position")
 
 """
 
@@ -45,11 +47,25 @@ parser.add_argument(
 )
 parser.add_argument("--fix-base", action="store_true", default=False, help="Fix the base to where it is imported.")
 parser.add_argument(
-    "--make-instanceable",
-    action="store_true",
-    default=False,
-    help="Make the asset instanceable for efficient cloning.",
+    "--joint-stiffness",
+    type=float,
+    default=100.0,
+    help="The stiffness of the joint drive.",
 )
+parser.add_argument(
+    "--joint-damping",
+    type=float,
+    default=1.0,
+    help="The damping of the joint drive.",
+)
+parser.add_argument(
+    "--joint-target-type",
+    type=str,
+    default="position",
+    choices=["position", "velocity", "none"],
+    help="The type of control to use for the joint drive.",
+)
+
 # append AppLauncher cli args
 AppLauncher.add_app_launcher_args(parser)
 # parse the arguments
@@ -65,25 +81,23 @@ import contextlib
 import os
 
 import carb
-import omni.isaac.core.utils.stage as stage_utils
+import isaacsim.core.utils.stage as stage_utils
 import omni.kit.app
 
 from isaaclab.sim.converters import UrdfConverter, UrdfConverterCfg
 from isaaclab.utils.assets import check_file_path
 from isaaclab.utils.dict import print_dict
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-assets_path = os.path.join(BASE_DIR, "../../isaacLab/manipulation/assets/")
 
 def main():
     # check valid file path
-    urdf_path = assets_path + args_cli.input
+    urdf_path = args_cli.input
     if not os.path.isabs(urdf_path):
         urdf_path = os.path.abspath(urdf_path)
     if not check_file_path(urdf_path):
         raise ValueError(f"Invalid file path: {urdf_path}")
     # create destination path
-    dest_path = assets_path + args_cli.output
+    dest_path = args_cli.output
     if not os.path.isabs(dest_path):
         dest_path = os.path.abspath(dest_path)
 
@@ -95,7 +109,13 @@ def main():
         fix_base=args_cli.fix_base,
         merge_fixed_joints=args_cli.merge_joints,
         force_usd_conversion=True,
-        make_instanceable=args_cli.make_instanceable,
+        joint_drive=UrdfConverterCfg.JointDriveCfg(
+            gains=UrdfConverterCfg.JointDriveCfg.PDGainsCfg(
+                stiffness=args_cli.joint_stiffness,
+                damping=args_cli.joint_damping,
+            ),
+            target_type=args_cli.joint_target_type,
+        ),
     )
 
     # Print info
