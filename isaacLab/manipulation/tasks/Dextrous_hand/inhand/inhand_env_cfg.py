@@ -285,7 +285,7 @@ class RewardsCfg:
     # )
 
 
-@configclassimport isaaclab.envs.mdp as general_mdp
+@configclass
 class TerminationsCfg:
     """Termination terms for the MDP."""
 

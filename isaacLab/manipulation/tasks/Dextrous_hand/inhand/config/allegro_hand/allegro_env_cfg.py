@@ -10,7 +10,7 @@ import isaacLab.manipulation.tasks.Dextrous_hand.inhand.inhand_env_cfg as inhand
 ##
 # Pre-defined configs
 ##
-from isaacLab.manipulation.assets.config.robots.allegro import ALLEGRO_HAND_CFG  # isort: skip
+from isaacLab.manipulation.assets.config.allegro import ALLEGRO_HAND_CFG  # isort: skip
 
 
 @configclass

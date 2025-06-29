@@ -12,3 +12,4 @@ modifications and additional features.
 .. _dexterous cube manipulation: https://github.com/NVIDIA-Omniverse/IsaacGymEnvs/blob/main/isaacgymenvs/tasks/allegro_hand.py
 
 """
+from . import config
