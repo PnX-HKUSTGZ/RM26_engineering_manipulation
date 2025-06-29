@@ -23,8 +23,8 @@ from isaaclab.utils import configclass
 from isaaclab.utils.assets import ISAAC_NUCLEUS_DIR
 from isaaclab.utils.noise import AdditiveGaussianNoiseCfg as Gnoise
 
-import isaaclab_tasks.manager_based.manipulation.inhand.mdp as mdp
-
+import isaacLab.manipulation.tasks.Dextrous_hand.inhand.mdp as mdp
+import isaaclab_tasks.manager_based.manipulation.reach.mdp as general_mdp
 ##
 # Scene definition
 ##
@@ -93,7 +93,7 @@ class CommandsCfg:
 class ActionsCfg:
     """Action specifications for the MDP."""
 
-    joint_pos = mdp.EMAJointPositionToLimitsActionCfg(
+    joint_pos = general_mdp.EMAJointPositionToLimitsActionCfg(
         asset_name="robot",
         joint_names=[".*"],
         alpha=0.95,
@@ -114,28 +114,28 @@ class ObservationsCfg:
 
         # observation terms (order preserved)
         # -- robot terms
-        joint_pos = ObsTerm(func=mdp.joint_pos_limit_normalized, noise=Gnoise(std=0.005))
-        joint_vel = ObsTerm(func=mdp.joint_vel_rel, scale=0.2, noise=Gnoise(std=0.01))
+        joint_pos = ObsTerm(func=general_mdp.joint_pos_limit_normalized, noise=Gnoise(std=0.005))
+        joint_vel = ObsTerm(func=general_mdp.joint_vel_rel, scale=0.2, noise=Gnoise(std=0.01))
 
         # -- object terms
         object_pos = ObsTerm(
-            func=mdp.root_pos_w, noise=Gnoise(std=0.002), params={"asset_cfg": SceneEntityCfg("object")}
+            func=general_mdp.root_pos_w, noise=Gnoise(std=0.002), params={"asset_cfg": SceneEntityCfg("object")}
         )
         object_quat = ObsTerm(
-            func=mdp.root_quat_w, params={"asset_cfg": SceneEntityCfg("object"), "make_quat_unique": False}
+            func=general_mdp.root_quat_w, params={"asset_cfg": SceneEntityCfg("object"), "make_quat_unique": False}
         )
         object_lin_vel = ObsTerm(
-            func=mdp.root_lin_vel_w, noise=Gnoise(std=0.002), params={"asset_cfg": SceneEntityCfg("object")}
+            func=general_mdp.root_lin_vel_w, noise=Gnoise(std=0.002), params={"asset_cfg": SceneEntityCfg("object")}
         )
         object_ang_vel = ObsTerm(
-            func=mdp.root_ang_vel_w,
+            func=general_mdp.root_ang_vel_w,
             scale=0.2,
             noise=Gnoise(std=0.002),
             params={"asset_cfg": SceneEntityCfg("object")},
         )
 
         # -- command terms
-        goal_pose = ObsTerm(func=mdp.generated_commands, params={"command_name": "object_pose"})
+        goal_pose = ObsTerm(func=general_mdp.generated_commands, params={"command_name": "object_pose"})
         goal_quat_diff = ObsTerm(
             func=mdp.goal_quat_diff,
             params={"asset_cfg": SceneEntityCfg("object"), "command_name": "object_pose", "make_quat_unique": False},
@@ -176,7 +176,7 @@ class EventCfg:
     # startup
     # -- robot
     robot_physics_material = EventTerm(
-        func=mdp.randomize_rigid_body_material,
+        func=general_mdp.randomize_rigid_body_material,
         mode="startup",
         params={
             "asset_cfg": SceneEntityCfg("robot", body_names=".*"),
@@ -187,7 +187,7 @@ class EventCfg:
         },
     )
     robot_scale_mass = EventTerm(
-        func=mdp.randomize_rigid_body_mass,
+        func=general_mdp.randomize_rigid_body_mass,
         mode="startup",
         params={
             "asset_cfg": SceneEntityCfg("robot", body_names=".*"),
@@ -196,7 +196,7 @@ class EventCfg:
         },
     )
     robot_joint_stiffness_and_damping = EventTerm(
-        func=mdp.randomize_actuator_gains,
+        func=general_mdp.randomize_actuator_gains,
         mode="startup",
         params={
             "asset_cfg": SceneEntityCfg("robot", joint_names=".*"),
@@ -209,7 +209,7 @@ class EventCfg:
 
     # -- object
     object_physics_material = EventTerm(
-        func=mdp.randomize_rigid_body_material,
+        func=general_mdp.randomize_rigid_body_material,
         mode="startup",
         params={
             "asset_cfg": SceneEntityCfg("object", body_names=".*"),
@@ -220,7 +220,7 @@ class EventCfg:
         },
     )
     object_scale_mass = EventTerm(
-        func=mdp.randomize_rigid_body_mass,
+        func=general_mdp.randomize_rigid_body_mass,
         mode="startup",
         params={
             "asset_cfg": SceneEntityCfg("object"),
@@ -231,7 +231,7 @@ class EventCfg:
 
     # reset
     reset_object = EventTerm(
-        func=mdp.reset_root_state_uniform,
+        func=general_mdp.reset_root_state_uniform,
         mode="reset",
         params={
             "pose_range": {"x": [-0.01, 0.01], "y": [-0.01, 0.01], "z": [-0.01, 0.01]},
@@ -273,23 +273,23 @@ class RewardsCfg:
     )
 
     # -- penalties
-    joint_vel_l2 = RewTerm(func=mdp.joint_vel_l2, weight=-2.5e-5)
-    action_l2 = RewTerm(func=mdp.action_l2, weight=-0.0001)
-    action_rate_l2 = RewTerm(func=mdp.action_rate_l2, weight=-0.01)
+    joint_vel_l2 = RewTerm(func=general_mdp.joint_vel_l2, weight=-2.5e-5)
+    action_l2 = RewTerm(func=general_mdp.action_l2, weight=-0.0001)
+    action_rate_l2 = RewTerm(func=general_mdp.action_rate_l2, weight=-0.01)
 
     # -- optional penalties (these are disabled by default)
     # object_away_penalty = RewTerm(
-    #     func=mdp.is_terminated_term,
+    #     func=general_mdp.is_terminated_term,
     #     weight=-0.0,
     #     params={"term_keys": "object_out_of_reach"},
     # )
 
 
-@configclass
+@configclassimport isaaclab.envs.mdp as general_mdp
 class TerminationsCfg:
     """Termination terms for the MDP."""
 
-    time_out = DoneTerm(func=mdp.time_out, time_out=True)
+    time_out = DoneTerm(func=general_mdp.time_out, time_out=True)
 
     max_consecutive_success = DoneTerm(
         func=mdp.max_consecutive_success, params={"num_success": 50, "command_name": "object_pose"}

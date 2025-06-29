@@ -7,13 +7,14 @@ import math
 
 from isaaclab.utils import configclass
 
-import isaaclab_tasks.manager_based.manipulation.reach.mdp as mdp
-from isaaclab_tasks.manager_based.manipulation.reach.reach_env_cfg import ReachEnvCfg
+import isaacLab.manipulation.tasks.Robot_arm.reach.mdp as mdp
+import isaaclab_tasks.manager_based.manipulation.reach.mdp as general_mdp
+from isaacLab.manipulation.tasks.Robot_arm.reach.reach_env_cfg import ReachEnvCfg
 
 ##
 # Pre-defined configs
 ##
-from isaaclab_assets import UR10_CFG  # isort: skip
+from isaacLab.manipulation.assets.config.universal_robots import UR10_CFG  # isort: skip
 
 
 ##
@@ -36,7 +37,7 @@ class UR10ReachEnvCfg(ReachEnvCfg):
         self.rewards.end_effector_position_tracking_fine_grained.params["asset_cfg"].body_names = ["ee_link"]
         self.rewards.end_effector_orientation_tracking.params["asset_cfg"].body_names = ["ee_link"]
         # override actions
-        self.actions.arm_action = mdp.JointPositionActionCfg(
+        self.actions.arm_action = general_mdp.JointPositionActionCfg(
             asset_name="robot", joint_names=[".*"], scale=0.5, use_default_offset=True
         )
         # override command generator body

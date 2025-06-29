@@ -7,13 +7,14 @@ import math
 
 from isaaclab.utils import configclass
 
-import isaaclab_tasks.manager_based.manipulation.reach.mdp as mdp
-from isaaclab_tasks.manager_based.manipulation.reach.reach_env_cfg import ReachEnvCfg
+import isaacLab.manipulation.tasks.Robot_arm.reach.mdp as mdp
+import isaaclab_tasks.manager_based.manipulation.reach.mdp as general_mdp
+from isaacLab.manipulation.tasks.Robot_arm.reach.reach_env_cfg import ReachEnvCfg
 
 ##
 # Pre-defined configs
 ##
-from isaaclab_assets import FRANKA_PANDA_CFG  # isort: skip
+from isaacLab.manipulation.assets.config.franka import FRANKA_PANDA_CFG  # isort: skip
 
 
 ##
@@ -35,7 +36,7 @@ class FrankaReachEnvCfg(ReachEnvCfg):
         self.rewards.end_effector_orientation_tracking.params["asset_cfg"].body_names = ["panda_hand"]
 
         # override actions
-        self.actions.arm_action = mdp.JointPositionActionCfg(
+        self.actions.arm_action = general_mdp.JointPositionActionCfg(
             asset_name="robot", joint_names=["panda_joint.*"], scale=0.5, use_default_offset=True
         )
         # override command generator body

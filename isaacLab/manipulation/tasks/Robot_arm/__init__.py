@@ -1,3 +1,4 @@
-"""Locomotion environments for legged robots."""
+"""Manipulation environments for robots."""
 
 from .reach import *  # noqa
+from .lift import *

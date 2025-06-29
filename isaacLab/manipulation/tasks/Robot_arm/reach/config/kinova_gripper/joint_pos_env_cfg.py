@@ -7,10 +7,11 @@ import math
 
 from isaaclab.utils import configclass
 
-import isaaclab_tasks.manager_based.manipulation.reach.mdp as mdp
-#import isaacLab.manipulation.tasks.Robot_arm.reach.mdp as mdp
-from isaacLab.manipulation.tasks.Robot_arm.reach.reach_env_cfg import ReachEnvCfg
-#from isaaclab_tasks.manager_based.manipulation.reach.reach_env_cfg import ReachEnvCfg
+#import isaaclab_tasks.manager_based.manipulation.reach.mdp as mdp
+import isaacLab.manipulation.tasks.Robot_arm.reach.mdp as mdp
+import isaaclab_tasks.manager_based.manipulation.reach.mdp as general_mdp
+#from isaacLab.manipulation.tasks.Robot_arm.reach.reach_env_cfg import ReachEnvCfg
+from isaaclab_tasks.manager_based.manipulation.reach.reach_env_cfg import ReachEnvCfg
 
 ##
 # Pre-defined configs
@@ -39,7 +40,7 @@ class KinovaReachEnvCfg(ReachEnvCfg):
         self.rewards.end_effector_position_tracking_fine_grained.params["asset_cfg"].body_names = ["end_effector_link"]
         self.rewards.end_effector_orientation_tracking.params["asset_cfg"].body_names = ["end_effector_link"]
         # override actions
-        self.actions.arm_action = mdp.RelativeJointPositionActionCfg(
+        self.actions.arm_action = general_mdp.RelativeJointPositionActionCfg(
             asset_name="robot", joint_names=["joint_[1-7]"], scale=0.04
         )
 

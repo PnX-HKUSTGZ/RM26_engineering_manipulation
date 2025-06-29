@@ -4,3 +4,6 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 """Fixed-arm environments with end-effector pose tracking commands."""
+
+# 导入config模块来注册环境
+from . import config

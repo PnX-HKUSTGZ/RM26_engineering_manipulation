@@ -49,6 +49,7 @@ from isaaclab.managers import TerminationTermCfg as DoneTerm
 import isaaclab_tasks  # noqa: F401
 from isaaclab_tasks.manager_based.manipulation.lift import mdp
 from isaaclab_tasks.utils import parse_env_cfg
+from isaaclab.utils.math import euler_xyz_from_quat
 
 
 def pre_process_actions(delta_pose: torch.Tensor, gripper_command: bool) -> torch.Tensor:
@@ -138,6 +139,20 @@ def main():
             # pre-process actions
             actions = pre_process_actions(delta_pose, gripper_command)
             # apply actions
+
+            ########################
+            ee_frame_sensor = env.unwrapped.scene["ee_frame"]
+            
+            tcp_position = ee_frame_sensor.data.target_pos_w[0, 0, :].clone().cpu().numpy().tolist()
+            #omni.log.warn(f"pos:{tcp_position}")
+            tcp_orientation = ee_frame_sensor.data.target_quat_w[..., 0, :].clone()
+            omni.log.warn(f"tcp_quat:{tcp_orientation}")
+            tcp_euler_tensor = euler_xyz_from_quat(tcp_orientation)
+            
+            tcp_euler = [tensor.cpu().item() for tensor in tcp_euler_tensor]
+            ##################
+            omni.log.warn(f"tcp_pos:{tcp_position}")
+            omni.log.warn(f"tcp_euler:{tcp_euler}")
             env.step(actions)
 
             if should_reset_recording_instance:

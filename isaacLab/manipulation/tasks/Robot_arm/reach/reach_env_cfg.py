@@ -21,8 +21,8 @@ from isaaclab.utils import configclass
 from isaaclab.utils.assets import ISAAC_NUCLEUS_DIR
 from isaaclab.utils.noise import AdditiveUniformNoiseCfg as Unoise
 
-import isaaclab_tasks.manager_based.manipulation.reach.mdp as mdp
-
+import isaaclab_tasks.manager_based.manipulation.reach.mdp as general_mdp
+from . import mdp
 ##
 # Scene definition
 ##
@@ -66,12 +66,12 @@ class ReachSceneCfg(InteractiveSceneCfg):
 class CommandsCfg:
     """Command terms for the MDP."""
 
-    ee_pose = mdp.UniformPoseCommandCfg(
+    ee_pose = general_mdp.UniformPoseCommandCfg(
         asset_name="robot",
         body_name=MISSING,
         resampling_time_range=(4.0, 4.0),
         debug_vis=True,
-        ranges=mdp.UniformPoseCommandCfg.Ranges(
+        ranges=general_mdp.UniformPoseCommandCfg.Ranges(
             pos_x=(0.35, 0.65),
             pos_y=(-0.2, 0.2),
             pos_z=(0.15, 0.5),
@@ -99,10 +99,10 @@ class ObservationsCfg:
         """Observations for policy group."""
 
         # observation terms (order preserved)
-        joint_pos = ObsTerm(func=mdp.joint_pos_rel, noise=Unoise(n_min=-0.01, n_max=0.01))
-        joint_vel = ObsTerm(func=mdp.joint_vel_rel, noise=Unoise(n_min=-0.01, n_max=0.01))
-        pose_command = ObsTerm(func=mdp.generated_commands, params={"command_name": "ee_pose"})
-        actions = ObsTerm(func=mdp.last_action)
+        joint_pos = ObsTerm(func=general_mdp.joint_pos_rel, noise=Unoise(n_min=-0.01, n_max=0.01))
+        joint_vel = ObsTerm(func=general_mdp.joint_vel_rel, noise=Unoise(n_min=-0.01, n_max=0.01))
+        pose_command = ObsTerm(func=general_mdp.generated_commands, params={"command_name": "ee_pose"})
+        actions = ObsTerm(func=general_mdp.last_action)
 
         def __post_init__(self):
             self.enable_corruption = True
@@ -117,7 +117,7 @@ class EventCfg:
     """Configuration for events."""
 
     reset_robot_joints = EventTerm(
-        func=mdp.reset_joints_by_scale,
+        func=general_mdp.reset_joints_by_scale,
         mode="reset",
         params={
             "position_range": (0.5, 1.5),
@@ -148,9 +148,9 @@ class RewardsCfg:
     )
 
     # action penalty
-    action_rate = RewTerm(func=mdp.action_rate_l2, weight=-0.0001)
+    action_rate = RewTerm(func=general_mdp.action_rate_l2, weight=-0.0001)
     joint_vel = RewTerm(
-        func=mdp.joint_vel_l2,
+        func=general_mdp.joint_vel_l2,
         weight=-0.0001,
         params={"asset_cfg": SceneEntityCfg("robot")},
     )
@@ -160,7 +160,7 @@ class RewardsCfg:
 class TerminationsCfg:
     """Termination terms for the MDP."""
 
-    time_out = DoneTerm(func=mdp.time_out, time_out=True)
+    time_out = DoneTerm(func=general_mdp.time_out, time_out=True)
 
 
 @configclass
@@ -168,11 +168,11 @@ class CurriculumCfg:
     """Curriculum terms for the MDP."""
 
     action_rate = CurrTerm(
-        func=mdp.modify_reward_weight, params={"term_name": "action_rate", "weight": -0.005, "num_steps": 4500}
+        func=general_mdp.modify_reward_weight, params={"term_name": "action_rate", "weight": -0.005, "num_steps": 4500}
     )
 
     joint_vel = CurrTerm(
-        func=mdp.modify_reward_weight, params={"term_name": "joint_vel", "weight": -0.001, "num_steps": 4500}
+        func=general_mdp.modify_reward_weight, params={"term_name": "joint_vel", "weight": -0.001, "num_steps": 4500}
     )
 
 
