@@ -18,7 +18,7 @@ INSTALL_REQUIRES = [
 
 # Installation operation
 setup(
-    # TODO: Change your package naming
+    
     # -----------------------------------------------------------------
     name="isaacLab.manipulation",
     packages=["isaacLab.manipulation"],
