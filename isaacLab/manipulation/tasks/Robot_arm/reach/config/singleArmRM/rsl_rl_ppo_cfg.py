@@ -13,11 +13,11 @@ from isaaclab_rl.rsl_rl import (
 
 
 @configclass
-class KinovaReachPPORunnerCfg(RslRlOnPolicyRunnerCfg):
+class EngineerReachPPORunnerCfg(RslRlOnPolicyRunnerCfg):
     num_steps_per_env = 24
     max_iterations = 1000
     save_interval = 50
-    experiment_name = "reach_kinova"
+    experiment_name = "reach_engineer"
     run_name = ""
     resume = False
     empirical_normalization = False

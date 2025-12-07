@@ -6,6 +6,8 @@
 from isaaclab.managers import SceneEntityCfg
 from isaaclab.utils import configclass
 
+import isaacLab.manipulation.tasks.Robot_arm.reach.mdp as mdp
+import isaaclab_tasks.manager_based.manipulation.reach.mdp as general_mdp
 from isaaclab_tasks.manager_based.manipulation.reach.reach_env_cfg import ReachEnvCfg
 
 ##

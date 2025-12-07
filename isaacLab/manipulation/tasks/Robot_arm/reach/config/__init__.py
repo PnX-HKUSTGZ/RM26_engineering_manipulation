@@ -10,3 +10,4 @@
 from .franka import *
 from .kinova_gripper import *
 from .ur_10 import *
+from .singleArmRM import *
