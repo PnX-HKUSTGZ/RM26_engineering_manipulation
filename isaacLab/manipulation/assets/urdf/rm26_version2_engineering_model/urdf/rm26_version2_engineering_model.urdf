@@ -1,0 +1,1173 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<robot
+  name="rm26_version2_engineering_model">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="-0.0793997913558526 0.0237223101327347 -0.016690080557761"
+        rpy="0 0 0" />
+      <mass
+        value="1.1873044382466" />
+      <inertia
+        ixx="0.00187874536986034"
+        ixy="-1.05938471252743E-10"
+        ixz="6.11069944212784E-07"
+        iyy="0.00846326402384722"
+        iyz="3.27848071160487E-05"
+        izz="0.00944131657661505" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version2_engineering_model/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.898039215686275 0.917647058823529 0.929411764705882 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version2_engineering_model/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="fl_link">
+    <inertial>
+      <mass value="0.001" />
+      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001" />
+    </inertial>
+  </link>
+  <joint
+    name="fl_joint"
+    type="revolute">
+    <origin
+      xyz="0.10768 0.26225 -0.097523"
+      rpy="-1.5708 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="fl_link" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-3.15"
+      upper="3.15"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="fr_link">
+    <inertial>
+      <mass value="0.001" />
+      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001" />
+    </inertial>
+  </link>
+  <joint
+    name="fr_joint"
+    type="revolute">
+    <origin
+      xyz="0.10778 -0.26175 -0.097491"
+      rpy="1.5708 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="fr_link" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-3.15"
+      upper="3.15"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="rl_link">
+    <inertial>
+      <mass value="0.001" />
+      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001" />
+    </inertial>
+  </link>
+  <joint
+    name="rl_joint"
+    type="revolute">
+    <origin
+      xyz="-0.26632 0.26225 -0.097491"
+      rpy="-1.5708 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="rl_link" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-3.15"
+      upper="3.15"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="rr_link">
+    <inertial>
+      <mass value="0.001" />
+      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001" />
+    </inertial>
+  </link>
+  <joint
+    name="rr_joint"
+    type="revolute">
+    <origin
+      xyz="-0.26622 -0.26175 -0.097523"
+      rpy="1.5708 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="rr_link" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-3.15"
+      upper="3.15"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="left_j0_link">
+    <inertial>
+      <origin
+        xyz="-0.00058715 -0.013969 0.038676"
+        rpy="0 0 0" />
+      <mass
+        value="1.4882" />
+      <inertia
+        ixx="0.0037642"
+        ixy="5.06E-06"
+        ixz="6.52E-06"
+        iyy="0.0033606"
+        iyz="-0.00049442"
+        izz="0.0024962" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version2_engineering_model/meshes/left_j0_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version2_engineering_model/meshes/left_j0_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_j0"
+    type="revolute">
+    <origin
+      xyz="-0.01677 0.0975 0.033"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="left_j0_link" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-3.15"
+      upper="3.15"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="left_j1_link">
+    <inertial>
+      <origin
+        xyz="-0.24417727 0.11078899 -0.07575176"
+        rpy="0 0 0" />
+      <mass
+        value="0.62272366" />
+      <inertia
+        ixx="0.00215174"
+        ixy="-0.00409057"
+        ixz="-0.00033213"
+        iyy="0.00929737"
+        iyz="0.00015104"
+        izz="0.01117309" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version2_engineering_model/meshes/left_j1_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.89804 0.91765 0.92941 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version2_engineering_model/meshes/left_j1_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_j1"
+    type="revolute">
+    <origin
+      xyz="0 -0.055 0.06"
+      rpy="1.5708 0 0" />
+    <parent
+      link="left_j0_link" />
+    <child
+      link="left_j1_link" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-3.15"
+      upper="3.15"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="left_j2_link">
+    <inertial>
+      <origin
+        xyz="0.08485695 -0.00031072 -0.03600463"
+        rpy="0 0 0" />
+      <mass
+        value="0.79672441" />
+      <inertia
+        ixx="0.00068031"
+        ixy="2.97E-06"
+        ixz="-3.902E-05"
+        iyy="0.00266679"
+        iyz="5.3E-07"
+        izz="0.00265132" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version2_engineering_model/meshes/left_j2_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version2_engineering_model/meshes/left_j2_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_j2"
+    type="revolute">
+    <origin
+      xyz="-0.32331 0.14661 -0.10085"
+      rpy="0 0 0" />
+    <parent
+      link="left_j1_link" />
+    <child
+      link="left_j2_link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-3.15"
+      upper="3.15"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="left_j3_link">
+    <inertial>
+      <origin
+        xyz="-0.00028287 -9.33E-05 -0.060638"
+        rpy="0 0 0" />
+      <mass
+        value="0.42224679" />
+      <inertia
+        ixx="0.0010976"
+        ixy="4.686E-05"
+        ixz="-3.62E-06"
+        iyy="0.0014214"
+        iyz="-1.34E-06"
+        izz="0.00073219" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version2_engineering_model/meshes/left_j3_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version2_engineering_model/meshes/left_j3_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_j3"
+    type="revolute">
+    <origin
+      xyz="0.1565 -0.0012269 -0.0365"
+      rpy="3.1338 1.5708 0" />
+    <parent
+      link="left_j2_link" />
+    <child
+      link="left_j3_link" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-3.15"
+      upper="3.15"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="left_j4_link">
+    <inertial>
+      <origin
+        xyz="0.02581905 -0.00027313 -0.0559693"
+        rpy="0 0 0" />
+      <mass
+        value="0.2384887 " />
+      <inertia
+        ixx="0.00017517"
+        ixy="3.1E-07"
+        ixz="3E-08"
+        iyy="0.00014632"
+        iyz="0"
+        izz="0.00010336" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version2_engineering_model/meshes/left_j4_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version2_engineering_model/meshes/left_j4_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_j4"
+    type="revolute">
+    <origin
+      xyz="0.056 0 -0.112"
+      rpy="-1.5708 1.563 -1.5708" />
+    <parent
+      link="left_j3_link" />
+    <child
+      link="left_j4_link" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-1.5708"
+      upper="1.5708"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="left_j5_link">
+    <inertial>
+      <origin
+        xyz="-0.00637501 0.00347882 -0.07615987"
+        rpy="0 0 0" />
+      <mass
+        value="0.18385374" />
+      <inertia
+        ixx="0.00018036"
+        ixy="-6.356E-05"
+        ixz="-2.663E-05"
+        iyy="0.00026793"
+        iyz="1.491E-05"
+        izz="0.00020502" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version2_engineering_model/meshes/left_j5_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.89804 0.91765 0.92941 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version2_engineering_model/meshes/left_j5_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_j5"
+    type="revolute">
+    <origin
+      xyz="0.012368 -0.00013084 -0.05596"
+      rpy="3.131 -1.5708 3.131" />
+    <parent
+      link="left_j4_link" />
+    <child
+      link="left_j5_link" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-3.15"
+      upper="3.15"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="left_end_link">
+  </link>
+  <joint
+    name="left_end"
+    type="revolute">
+    <origin
+      xyz="0 -0.0005 -0.12263"
+      rpy="-3.1416 0 0" />
+    <parent
+      link="left_j5_link" />
+    <child
+      link="left_end_link" />
+    <axis
+      xyz="0 0.017998 -0.99984" />
+    <limit
+      lower="-3.15"
+      upper="3.15"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="left_end_left_link">
+    <inertial>
+      <origin
+        xyz="0.03980537 0.02370171 -0.02758048"
+        rpy="0 0 0" />
+      <mass
+        value="0.03450466" />
+      <inertia
+        ixx="2.075e-05"
+        ixy="9.54e-06"
+        ixz="8e-08"
+        iyy="3.842e-05"
+        iyz="1e-07"
+        izz="2.852e-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version2_engineering_model/meshes/left_end_left_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.84706 0.84706 0.84706 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version2_engineering_model/meshes/left_end_left_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_end_left"
+    type="revolute">
+    <origin
+      xyz="0.0155 -0.028 -0.10663"
+      rpy="-3.1416 1.5602 1.5708" />
+    <parent
+      link="left_j5_link" />
+    <child
+      link="left_end_left_link" />
+    <axis
+      xyz="0.010578 0 -0.99994" />
+    <limit
+      lower="-1.5708"
+      upper="1.5708"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="left_end_right_link">
+    <inertial>
+      <origin
+        xyz="0.03920015 -0.02468265 -0.02758688"
+        rpy="0 0 0" />
+      <mass
+        value="0.03450466" />
+      <inertia
+        ixx="2.124e-05"
+        ixy="-9.97e-06"
+        ixz="8e-08"
+        iyy="3.793e-05"
+        iyz="-1.1e-07"
+        izz="2.852e-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version2_engineering_model/meshes/left_end_right_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.84706 0.84706 0.84706 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version2_engineering_model/meshes/left_end_right_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_end_right"
+    type="revolute">
+    <origin
+      xyz="-0.0155 -0.028 -0.10663"
+      rpy="-3.1416 1.5602 1.5708" />
+    <parent
+      link="left_j5_link" />
+    <child
+      link="left_end_right_link" />
+    <axis
+      xyz="-0.010578 0 0.99994" />
+    <limit
+      lower="-1.5707963267"
+      upper="1.5707963267"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="right_j0_link">
+    <inertial>
+      <origin
+        xyz="0.00058715 0.01396934 0.03867567"
+        rpy="0 0 0" />
+      <mass
+        value="1.4882437" />
+      <inertia
+        ixx="0.00376423"
+        ixy="5.06e-06"
+        ixz="-6.52e-06"
+        iyy="0.00336061"
+        iyz="0.00049442"
+        izz="0.00249615" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version2_engineering_model/meshes/right_j0_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version2_engineering_model/meshes/right_j0_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_j0"
+    type="revolute">
+    <origin
+      xyz="-0.01677 -0.0975 0.032"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="right_j0_link" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-3.15"
+      upper="3.15"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="right_j1_link">
+    <inertial>
+      <origin
+        xyz="-0.24438226 0.11033607 0.07575176"
+        rpy="0 0 0" />
+      <mass
+        value="0.62272366" />
+      <inertia
+        ixx="0.00212873"
+        ixy="-0.00407036"
+        ixz="0.00033267"
+        iyy="0.00932038"
+        iyz="-0.00014985"
+        izz="0.01117309" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version2_engineering_model/meshes/right_j1_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version2_engineering_model/meshes/right_j1_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_j1"
+    type="revolute">
+    <origin
+      xyz="0 0.055 0.06"
+      rpy="1.5708 0 0" />
+    <parent
+      link="right_j0_link" />
+    <child
+      link="right_j1_link" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-3.15"
+      upper="3.15"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="right_j2_link">
+    <inertial>
+      <origin
+        xyz="0.08485275 -0.00089955 0.03600463"
+        rpy="0 0 0" />
+      <mass
+        value="0.79672441" />
+      <inertia
+        ixx="0.0006808"
+        ixy="-3.13e-05"
+        ixz="3.903e-05"
+        iyy="0.0026663"
+        iyz="-2e-08"
+        izz="0.00265132" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version2_engineering_model/meshes/right_j2_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.84706 0.84706 0.84706 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version2_engineering_model/meshes/right_j2_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_j2"
+    type="revolute">
+    <origin
+      xyz="-0.32352 0.14615 0.10085"
+      rpy="0 0 0" />
+    <parent
+      link="right_j1_link" />
+    <child
+      link="right_j2_link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-3.15"
+      upper="3.15"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="right_j3_link">
+    <inertial>
+      <origin
+        xyz="-0.00028287 -9.333e-05 -0.0606378"
+        rpy="0 0 0" />
+      <mass
+        value="0.42224679" />
+      <inertia
+        ixx="0.00109764"
+        ixy="4.686e-05"
+        ixz="-3.63e-06"
+        iyy="0.0014214"
+        iyz="-1.34e-06"
+        izz="0.00073219" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version2_engineering_model/meshes/right_j3_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version2_engineering_model/meshes/right_j3_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_j3"
+    type="revolute">
+    <origin
+      xyz="0.1565 -0.0010052 0.0365"
+      rpy="-0.0064229 -1.5708 0" />
+    <parent
+      link="right_j2_link" />
+    <child
+      link="right_j3_link" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-3.15"
+      upper="3.15"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="right_j4_link">
+    <inertial>
+      <origin
+        xyz="0.02581978 0.00019162 -0.05603071"
+        rpy="0 0 0" />
+      <mass
+        value="0.2384887" />
+      <inertia
+        ixx="0.00017517"
+        ixy="-2.1e-07"
+        ixz="-3e-08"
+        iyy="0.00014631"
+        iyz="0.0"
+        izz="0.00010336" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version2_engineering_model/meshes/right_j4_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version2_engineering_model/meshes/right_j4_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_j4"
+    type="revolute">
+    <origin
+      xyz="-0.056 0 -0.112"
+      rpy="-1.5708 1.5644 1.5708" />
+    <parent
+      link="right_j3_link" />
+    <child
+      link="right_j4_link" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-1.5708"
+      upper="1.5708"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="right_j5_link">
+    <inertial>
+      <origin
+        xyz="0.00659076 -0.00324409 -0.07530749"
+        rpy="0 0 0" />
+      <mass
+        value="0.17783531" />
+      <inertia
+        ixx="0.00017766"
+        ixy="-6.383e-05"
+        ixz="2.563e-05"
+        iyy="0.00026388"
+        iyz="-1.602e-05"
+        izz="0.00020144" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version2_engineering_model/meshes/right_j5_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.84706 0.84706 0.84706 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version2_engineering_model/meshes/right_j5_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_j5"
+    type="revolute">
+    <origin
+      xyz="0.012369 9.179E-05 -0.05604"
+      rpy="3.1342 -1.5708 3.131" />
+    <parent
+      link="right_j4_link" />
+    <child
+      link="right_j5_link" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-3.15"
+      upper="3.15"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="right_end_link">
+  </link>
+  <joint
+    name="right_end"
+    type="revolute">
+    <origin
+      xyz="0 0.0005 -0.12263"
+      rpy="3.1416 0 0" />
+    <parent
+      link="right_j5_link" />
+    <child
+      link="right_end_link" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-3.15"
+      upper="3.15"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="right_end_left_link">
+    <inertial>
+      <origin
+        xyz="0.038697 0.024683 -0.028288"
+        rpy="0 0 0" />
+      <mass
+        value="0.03450466" />
+      <inertia
+        ixx="2.124e-05"
+        ixy="9.97e-06"
+        ixz="-5e-08"
+        iyy="3.793e-05"
+        iyz="-7e-08"
+        izz="2.852e-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version2_engineering_model/meshes/right_end_left_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.84706 0.84706 0.84706 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version2_engineering_model/meshes/right_end_left_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_end_left"
+    type="revolute">
+    <origin
+      xyz="0.0155 -0.028 -0.10663"
+      rpy="0 1.5634 -1.5708" />
+    <parent
+      link="right_j5_link" />
+    <child
+      link="right_end_left_link" />
+    <axis
+      xyz="-0.007421 0 -0.99997" />
+    <limit
+      lower="-1.5708"
+      upper="1.5708"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="right_end_right_link">
+    <inertial>
+      <origin
+        xyz="0.039303 -0.023702 -0.028292"
+        rpy="0 0 0" />
+      <mass
+        value="0.03450466" />
+      <inertia
+        ixx="2.075e-05"
+        ixy="-9.54e-06"
+        ixz="-6e-08"
+        iyy="3.842e-05"
+        iyz="7e-08"
+        izz="2.852e-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version2_engineering_model/meshes/right_end_right_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.84706 0.84706 0.84706 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version2_engineering_model/meshes/right_end_right_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_end_right"
+    type="revolute">
+    <origin
+      xyz="-0.0155 -0.028 -0.10663"
+      rpy="0 1.5634 -1.5708" />
+    <parent
+      link="right_j5_link" />
+    <child
+      link="right_end_right_link" />
+    <axis
+      xyz="0.007421 0 0.99997" />
+    <limit
+      lower="-1.5708"
+      upper="1.5708"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="lift_platform_link">
+    <inertial>
+      <origin
+        xyz="-0.002476508677881 0.0121146154374714 -0.18508932432801"
+        rpy="0 0 0" />
+      <mass
+        value="0.0632558738654114" />
+      <inertia
+        ixx="0.000646699040971394"
+        ixy="3.91588634116518E-09"
+        ixz="-3.02100764444223E-07"
+        iyy="0.000651722046164558"
+        iyz="-1.80581316422463E-06"
+        izz="1.26311935622584E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version2_engineering_model/meshes/lift_platform_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.192156862745098 0.192156862745098 0.192156862745098 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version2_engineering_model/meshes/lift_platform_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="lift_platform"
+    type="prismatic">
+    <origin
+      xyz="-0.12427 -0.044497 0.38835"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="lift_platform_link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-0.05"
+      upper="0.6"
+      effort="0"
+      velocity="0" />
+  </joint>
+</robot>

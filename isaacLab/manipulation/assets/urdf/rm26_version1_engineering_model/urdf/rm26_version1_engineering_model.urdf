@@ -1,0 +1,554 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="rm26_version1_engineering_model">
+  <link
+    name="base_link">
+  </link>
+  <link
+    name="chasis_Link">
+    <inertial>
+      <origin
+        xyz="0.011583 0.00022577 0.036705"
+        rpy="0 0 0" />
+      <mass
+        value="2.0877" />
+      <inertia
+        ixx="0.0029411"
+        ixy="-1.5751E-07"
+        ixz="3.5749E-05"
+        iyy="0.016809"
+        iyz="-1.6425E-08"
+        izz="0.018688" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version1_engineering_model/meshes/chasis_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.89804 0.91765 0.92941 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version1_engineering_model/meshes/chasis_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="chasis_fix_joint"
+    type="fixed">
+    <origin
+      xyz="0 0 0.0065"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="chasis_Link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="fl_Link">
+  </link>
+  <joint
+    name="fl_joint"
+    type="revolute">
+    <origin
+      xyz="0.134999999999994 0.145000000000009 0.0345000000000023"
+      rpy="-1.5707963267949 0 0" />
+    <parent
+      link="chasis_Link" />
+    <child
+      link="fl_Link" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-3.14"
+      upper="3.14"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="fr_Link">
+  </link>
+  <joint
+    name="fr_joint"
+    type="revolute">
+    <origin
+      xyz="0.134999999999995 -0.144999999999996 0.0345000000000023"
+      rpy="1.5707963267949 0 0" />
+    <parent
+      link="chasis_Link" />
+    <child
+      link="fr_Link" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-3.14"
+      upper="3.14"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="rl_Link">
+  </link>
+  <joint
+    name="rl_joint"
+    type="revolute">
+    <origin
+      xyz="-0.235000000000006 0.14500000000001 0.0345000000000023"
+      rpy="-1.5707963267949 0 0" />
+    <parent
+      link="chasis_Link" />
+    <child
+      link="rl_Link" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-3.14"
+      upper="3.14"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="rr_Link">
+  </link>
+  <joint
+    name="rr_joint"
+    type="revolute">
+    <origin
+      xyz="-0.220000000000005 -0.144999999999996 0.0345000000000023"
+      rpy="1.5707963267949 0 0" />
+    <parent
+      link="chasis_Link" />
+    <child
+      link="rr_Link" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-3.14"
+      upper="3.14"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="j1_Link">
+    <inertial>
+      <origin
+        xyz="-0.0343319480610391 -0.0160298397087286 0.0543083307807403"
+        rpy="0 0 0" />
+      <mass
+        value="1.88378095557823" />
+      <inertia
+        ixx="0.014829968"
+        ixy="0.003109302"
+        ixz="-0.005532366"
+        iyy="0.017550057"
+        iyz="-0.002561858"
+        izz="0.013037222"
+      />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version1_engineering_model/meshes/j1_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version1_engineering_model/meshes/j1_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="j1"
+    type="revolute">
+    <origin
+      xyz="0 0 0.0715"
+      rpy="0 0 0" />
+    <parent
+      link="chasis_Link" />
+    <child
+      link="j1_Link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.5708"
+      upper="1.5708"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="j2_Link">
+    <inertial>
+      <origin
+        xyz="-0.104574009513968 0.0877502232422464 -0.0474977898176291"
+        rpy="0 0 0" />
+      <mass
+        value="6.58810684481394" />
+      <inertia
+        ixx="0.034884073"
+        ixy="0.0"
+        ixz="0.0"
+        iyy="0.046787800"
+        iyz="0.0"
+        izz="0.067943956"
+      />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version1_engineering_model/meshes/j2_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version1_engineering_model/meshes/j2_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="j2"
+    type="revolute">
+    <origin
+      xyz="0 -0.0679999999999988 0.0999999999999999"
+      rpy="1.5707963267949 0 0" />
+    <parent
+      link="j1_Link" />
+    <child
+      link="j2_Link" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-0.5"
+      upper="3.14"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="j3_Link">
+    <inertial>
+      <origin xyz="0.081636 0.003447 -0.029967" rpy="0 0 0" />
+      <mass
+        value="0.505" />
+        <inertia
+          ixx="0.000869007"
+          ixy="0.000149698"
+          ixz="-0.001235996"
+          iyy="0.004708467"
+          iyz="-0.000052191"
+          izz="0.004219722"
+        />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version1_engineering_model/meshes/j3_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version1_engineering_model/meshes/j3_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="j3"
+    type="revolute">
+    <origin
+      xyz="-0.237476651133987 0.199260734130401 -0.0357500000000011"
+      rpy="0 0 0" />
+    <parent
+      link="j2_Link" />
+    <child
+      link="j3_Link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-0.5"
+      upper="3.14"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="j4_Link">
+    <inertial>
+      <origin xyz="-0.006490 -0.000047 0.035837" rpy="0 0 0" />
+      <mass
+        value="0.462" />
+        <inertia
+          ixx="0.001083965"
+          ixy="-0.000000217"
+          ixz="-0.000156009"
+          iyy="0.001132132"
+          iyz="-0.000001137"
+          izz="0.000305823"
+        />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version1_engineering_model/meshes/j4_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version1_engineering_model/meshes/j4_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="j4"
+    type="revolute">
+    <origin
+      xyz="0.169493070688242 0.00153264107687906 -0.0300000000000037"
+      rpy="0.0690296114429052 1.57079631189374 0.0780718649087891" />
+    <parent
+      link="j3_Link" />
+    <child
+      link="j4_Link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.5708"
+      upper="1.5708"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="j5_Link">
+    <inertial>
+      <origin xyz="0.042788 -0.082120 -0.041539" rpy="0 0 0" />
+      <mass
+        value="0.504" />
+      <inertia
+        ixx="0.004252711"
+        ixy="0.0"
+        ixz="0.0"
+        iyy="0.001917301"
+        iyz="0.0"
+        izz="0.004077796"
+      />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version1_engineering_model/meshes/j5_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version1_engineering_model/meshes/j5_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="j5"
+    type="revolute">
+    <origin
+      xyz="-0.0405 0 0.0519999999999997"
+      rpy="1.57079632679459 -1.56175407332899 -1.57079632679459" />
+    <parent
+      link="j4_Link" />
+    <child
+      link="j5_Link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.0"
+      upper="3.14"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="j6_Link">
+    <inertial>
+      <origin
+        xyz="0.013625 -0.0033291 -0.057355"
+        rpy="0 0 0" />
+      <mass
+        value="0.26827" />
+      <inertia
+        ixx="0.000638216"
+        ixy="-0.000006051"
+        ixz="-0.000097795"
+        iyy="0.000668380"
+        iyz="0.000023896"
+        izz="0.000094883"
+      />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version1_engineering_model/meshes/j6_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.89804 0.91765 0.92941 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version1_engineering_model/meshes/j6_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="end_differential_controller/pitch_joint"
+    type="revolute">
+    <origin
+      xyz="0.069218 -0.14702 0.0145"
+      rpy="0 0 0" />
+    <parent
+      link="j5_Link" />
+    <child
+      link="j6_Link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-3.14"
+      upper="3.14"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="j7_Link">
+    <inertial>
+      <origin
+        xyz="-7.2073E-08 -1.5554E-08 -0.023807"
+        rpy="0 0 0" />
+      <mass
+        value="0.193033" />
+      <inertia
+        ixx="0.000097534"
+        ixy="0.000000000"
+        ixz="0.000000000"
+        iyy="0.000097534"
+        iyz="0.000000000"
+        izz="0.000062549"
+      />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version1_engineering_model/meshes/j7_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0 0 0 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rm26_version1_engineering_model/meshes/j7_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="end_differential_controller/roll_joint"
+    type="revolute">
+    <origin
+      xyz="0.0580129237069084 -0.0209112041918646 -0.0559603303461728"
+      rpy="0.34596069605537 1.5707963267949 0" />
+    <parent
+      link="j6_Link" />
+    <child
+      link="j7_Link" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-3.14"
+      upper="3.14"
+      effort="0"
+      velocity="0" />
+  </joint>
+</robot>

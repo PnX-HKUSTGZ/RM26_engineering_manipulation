@@ -5,7 +5,7 @@
 
 import gymnasium as gym
 
-from . import agents, rm_engineering_reach_env_cfg,rsl_rl_ppo_cfg
+from . import agents, rm_engineering_reach_env_cfg, rsl_rl_ppo_cfg
 
 ##
 # Register Gym environments.
