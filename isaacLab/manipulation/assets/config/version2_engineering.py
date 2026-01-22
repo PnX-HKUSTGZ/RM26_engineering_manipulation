@@ -52,83 +52,84 @@ spawn=sim_utils.UsdFileCfg(
 
  # --- initial state ---
 init_state=ArticulationCfg.InitialStateCfg(
-        # 位置你按场景调；工程车一般 z 稍微抬一点避免初始穿透
-        pos=(0.0, 0.0, 0.20),
+        # 位置：工程车初始位置，z轴稍微抬高避免穿透
+        pos=(0.0, 0.0, 0.15),
         joint_pos={
-            # wheels
+            # wheels - 轮子初始角度为0
             "fl_joint": 0.0,
             "fr_joint": 0.0,
             "rl_joint": 0.0,
             "rr_joint": 0.0,
 
-            # lift
+            # lift - 升降平台初始高度
             "lift_platform": 0.0,
 
-            # left arm
-            "left_j0": 0.0, "left_j1": 0.0, "left_j2": 0.0,
-            "left_j3": 0.0, "left_j4": 0.0, "left_j5": 0.0,
+            # left arm - 左臂初始位姿（收起状态）
+            "left_j0": 0.0, "left_j1": -0.5, "left_j2": 0.5,
+            "left_j3": 0.0, "left_j4": 0.5, "left_j5": 0.0,
             "left_end": 0.0, "left_end_left": 0.0, "left_end_right": 0.0,
 
-            # right arm
-            "right_j0": 0.0, "right_j1": 0.0, "right_j2": 0.0,
-            "right_j3": 0.0, "right_j4": 0.0, "right_j5": 0.0,
-            "right_end": 0.0, "right_end_left": 0.0, "right_end_right": 0.0,
+            # right arm - 右臂初始位姿（准备工作状态）
+            "right_j0": 0.0, "right_j1": -0.785, "right_j2": 0.785,
+            "right_j3": 0.0, "right_j4": 0.785, "right_j5": 0.0,
+            "right_end": 0.0, "right_end_left": 0.02, "right_end_right": 0.02,
         },
     ),
 
     # --- actuators ---
 actuators={
-        # 1) wheels: 通常给速度/力矩都可以；这里用 implicit actuator 并显式给 limit
+        # 1) wheels: 轮子速度控制（本任务中不使用）
         "wheels": ImplicitActuatorCfg(
             joint_names_expr=["fl_joint", "fr_joint", "rl_joint", "rr_joint"],
-            effort_limit_sim=0.0,
-            velocity_limit_sim=80.0,
-            # 轮子很多情况下你会用 velocity drive（stiffness/damping 根据你 action 定义再调）
+            effort_limit=50.0,
+            velocity_limit=10.0,
             stiffness=0.0,
-            damping=20.0,
+            damping=10.0,
         ),
 
-        # 2) lift prismatic：速度小、推力大（数值你按真实电机/丝杆再标定）
+        # 2) lift prismatic：升降平台（本任务中不使用）
         "lift": ImplicitActuatorCfg(
             joint_names_expr=["lift_platform"],
-            effort_limit_sim=0.0,
-            velocity_limit_sim=1.0,
+            effort_limit=500.0,
+            velocity_limit=0.5,
             stiffness=0.0,
-            damping=20.0,
+            damping=50.0,
         ),
 
-        # 3) left arm joints（不含夹爪）
+        # 3) left arm joints（不含夹爪）- 本任务不使用
         "left_arm": ImplicitActuatorCfg(
             joint_names_expr=["left_j[0-5]", "left_end"],
-            effort_limit_sim=120.0,
-            velocity_limit_sim=8.0,
-            stiffness=0.0,
-            damping=5.0,
+            effort_limit=87.0,
+            velocity_limit=2.0,
+            stiffness=400.0,
+            damping=80.0,
         ),
 
-        # 4) right arm joints（不含夹爪）
+        # 4) right arm joints（不含夹爪）- 主要控制对象
         "right_arm": ImplicitActuatorCfg(
             joint_names_expr=["right_j[0-5]", "right_end"],
-            effort_limit_sim=120.0,
-            velocity_limit_sim=8.0,
-            stiffness=0.0,
-            damping=5.0,
+            effort_limit=87.0,
+            velocity_limit=2.0,
+            stiffness=400.0,
+            damping=80.0,
         ),
 
-        # 5) grippers：末端左右夹指，建议用更强 damping（更稳）
+        # 5) left gripper：左手夹爪
         "left_gripper": ImplicitActuatorCfg(
             joint_names_expr=["left_end_left", "left_end_right"],
-            effort_limit_sim=0.0,
-            velocity_limit_sim=4.0,
-            stiffness=0.0,
-            damping=20.0,
+            effort_limit=200.0,
+            velocity_limit=0.2,
+            stiffness=2000.0,
+            damping=100.0,
         ),
+        
+        # 6) right gripper：右手夹爪
         "right_gripper": ImplicitActuatorCfg(
             joint_names_expr=["right_end_left", "right_end_right"],
-            effort_limit_sim=0.0,
-            velocity_limit_sim=4.0,
-            stiffness=0.0,
-            damping=20.0,
+            effort_limit=200.0,
+            velocity_limit=0.2,
+            stiffness=2000.0,
+            damping=100.0,
         ),
     },
 )

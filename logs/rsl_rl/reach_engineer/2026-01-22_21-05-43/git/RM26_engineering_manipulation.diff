@@ -1,0 +1,470 @@
+--- git status ---
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+  (use "git add/rm <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   isaacLab/manipulation/assets/config/version2_engineering.py
+	modified:   isaacLab/manipulation/tasks/Robot_arm/reach/config/singleArmRM/__init__.py
+	modified:   isaacLab/manipulation/tasks/Robot_arm/reach/config/singleArmRM/rm_engineering_reach_env_cfg.py
+	modified:   isaacLab/manipulation/tasks/Robot_arm/reach/mdp/events.py
+	deleted:    train.sh
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	CHECKLIST.md
+	README_REACH_ENV.md
+	RM26_REACH_ENV_SUMMARY.md
+	isaacLab/manipulation/tasks/Robot_arm/reach/config/singleArmRM/PARAMETER_GUIDE.md
+	isaacLab/manipulation/tasks/Robot_arm/reach/config/singleArmRM/README.md
+	logs/
+	outputs/2026-01-17/
+	outputs/2026-01-22/
+	quick_test_rm26.sh
+	test_rm26_reach_env.py
+	train_rm26_reach.sh
+
+no changes added to commit (use "git add" and/or "git commit -a") 
+
+
+--- git diff ---
+diff --git a/isaacLab/manipulation/assets/config/version2_engineering.py b/isaacLab/manipulation/assets/config/version2_engineering.py
+index ee2981c..878fb8e 100644
+--- a/isaacLab/manipulation/assets/config/version2_engineering.py
++++ b/isaacLab/manipulation/assets/config/version2_engineering.py
+@@ -52,83 +52,84 @@ spawn=sim_utils.UsdFileCfg(
+ 
+  # --- initial state ---
+ init_state=ArticulationCfg.InitialStateCfg(
+-        # 位置你按场景调；工程车一般 z 稍微抬一点避免初始穿透
+-        pos=(0.0, 0.0, 0.20),
++        # 位置：工程车初始位置，z轴稍微抬高避免穿透
++        pos=(0.0, 0.0, 0.15),
+         joint_pos={
+-            # wheels
++            # wheels - 轮子初始角度为0
+             "fl_joint": 0.0,
+             "fr_joint": 0.0,
+             "rl_joint": 0.0,
+             "rr_joint": 0.0,
+ 
+-            # lift
++            # lift - 升降平台初始高度
+             "lift_platform": 0.0,
+ 
+-            # left arm
+-            "left_j0": 0.0, "left_j1": 0.0, "left_j2": 0.0,
+-            "left_j3": 0.0, "left_j4": 0.0, "left_j5": 0.0,
++            # left arm - 左臂初始位姿（收起状态）
++            "left_j0": 0.0, "left_j1": -0.5, "left_j2": 0.5,
++            "left_j3": 0.0, "left_j4": 0.5, "left_j5": 0.0,
+             "left_end": 0.0, "left_end_left": 0.0, "left_end_right": 0.0,
+ 
+-            # right arm
+-            "right_j0": 0.0, "right_j1": 0.0, "right_j2": 0.0,
+-            "right_j3": 0.0, "right_j4": 0.0, "right_j5": 0.0,
+-            "right_end": 0.0, "right_end_left": 0.0, "right_end_right": 0.0,
++            # right arm - 右臂初始位姿（准备工作状态）
++            "right_j0": 0.0, "right_j1": -0.785, "right_j2": 0.785,
++            "right_j3": 0.0, "right_j4": 0.785, "right_j5": 0.0,
++            "right_end": 0.0, "right_end_left": 0.02, "right_end_right": 0.02,
+         },
+     ),
+ 
+     # --- actuators ---
+ actuators={
+-        # 1) wheels: 通常给速度/力矩都可以；这里用 implicit actuator 并显式给 limit
++        # 1) wheels: 轮子速度控制（本任务中不使用）
+         "wheels": ImplicitActuatorCfg(
+             joint_names_expr=["fl_joint", "fr_joint", "rl_joint", "rr_joint"],
+-            effort_limit_sim=0.0,
+-            velocity_limit_sim=80.0,
+-            # 轮子很多情况下你会用 velocity drive（stiffness/damping 根据你 action 定义再调）
++            effort_limit=50.0,
++            velocity_limit=10.0,
+             stiffness=0.0,
+-            damping=20.0,
++            damping=10.0,
+         ),
+ 
+-        # 2) lift prismatic：速度小、推力大（数值你按真实电机/丝杆再标定）
++        # 2) lift prismatic：升降平台（本任务中不使用）
+         "lift": ImplicitActuatorCfg(
+             joint_names_expr=["lift_platform"],
+-            effort_limit_sim=0.0,
+-            velocity_limit_sim=1.0,
++            effort_limit=500.0,
++            velocity_limit=0.5,
+             stiffness=0.0,
+-            damping=20.0,
++            damping=50.0,
+         ),
+ 
+-        # 3) left arm joints（不含夹爪）
++        # 3) left arm joints（不含夹爪）- 本任务不使用
+         "left_arm": ImplicitActuatorCfg(
+             joint_names_expr=["left_j[0-5]", "left_end"],
+-            effort_limit_sim=120.0,
+-            velocity_limit_sim=8.0,
+-            stiffness=0.0,
+-            damping=5.0,
++            effort_limit=87.0,
++            velocity_limit=2.0,
++            stiffness=400.0,
++            damping=80.0,
+         ),
+ 
+-        # 4) right arm joints（不含夹爪）
++        # 4) right arm joints（不含夹爪）- 主要控制对象
+         "right_arm": ImplicitActuatorCfg(
+             joint_names_expr=["right_j[0-5]", "right_end"],
+-            effort_limit_sim=120.0,
+-            velocity_limit_sim=8.0,
+-            stiffness=0.0,
+-            damping=5.0,
++            effort_limit=87.0,
++            velocity_limit=2.0,
++            stiffness=400.0,
++            damping=80.0,
+         ),
+ 
+-        # 5) grippers：末端左右夹指，建议用更强 damping（更稳）
++        # 5) left gripper：左手夹爪
+         "left_gripper": ImplicitActuatorCfg(
+             joint_names_expr=["left_end_left", "left_end_right"],
+-            effort_limit_sim=0.0,
+-            velocity_limit_sim=4.0,
+-            stiffness=0.0,
+-            damping=20.0,
++            effort_limit=200.0,
++            velocity_limit=0.2,
++            stiffness=2000.0,
++            damping=100.0,
+         ),
++        
++        # 6) right gripper：右手夹爪
+         "right_gripper": ImplicitActuatorCfg(
+             joint_names_expr=["right_end_left", "right_end_right"],
+-            effort_limit_sim=0.0,
+-            velocity_limit_sim=4.0,
+-            stiffness=0.0,
+-            damping=20.0,
++            effort_limit=200.0,
++            velocity_limit=0.2,
++            stiffness=2000.0,
++            damping=100.0,
+         ),
+     },
+ )
+\ No newline at end of file
+diff --git a/isaacLab/manipulation/tasks/Robot_arm/reach/config/singleArmRM/__init__.py b/isaacLab/manipulation/tasks/Robot_arm/reach/config/singleArmRM/__init__.py
+index 0c8eb72..6952efd 100644
+--- a/isaacLab/manipulation/tasks/Robot_arm/reach/config/singleArmRM/__init__.py
++++ b/isaacLab/manipulation/tasks/Robot_arm/reach/config/singleArmRM/__init__.py
+@@ -11,8 +11,12 @@ from . import agents, rm_engineering_reach_env_cfg, rsl_rl_ppo_cfg
+ # Register Gym environments.
+ ##
+ 
++##
++# RM26 Engineering V2 - Joint Position Control
++##
++
+ gym.register(
+-    id="Template-Isaac-Reach-Engineer-v0",
++    id="Template-Isaac-Reach-RM26-v0",
+     entry_point="isaaclab.envs:ManagerBasedRLEnv",
+     disable_env_checker=True,
+     kwargs={
+@@ -21,14 +25,12 @@ gym.register(
+     },
+ )
+ 
+-# gym.register(
+-#     id="Template-Isaac-Reach-Kinova-Play-v0",
+-#     entry_point="isaaclab.envs:ManagerBasedRLEnv",
+-#     disable_env_checker=True,
+-#     kwargs={
+-#         "env_cfg_entry_point": joint_pos_env_cfg.KinovaReachEnvCfg_PLAY,
+-#         "rl_games_cfg_entry_point": f"{agents.__name__}:rl_games_ppo_cfg.yaml",
+-#         "rsl_rl_cfg_entry_point": f"{agents.__name__}.rsl_rl_ppo_cfg:KinovaReachPPORunnerCfg",
+-#         "skrl_cfg_entry_point": f"{agents.__name__}:skrl_ppo_cfg.yaml",
+-#     },
+-# )
++gym.register(
++    id="Template-Isaac-Reach-RM26-Play-v0",
++    entry_point="isaaclab.envs:ManagerBasedRLEnv",
++    disable_env_checker=True,
++    kwargs={
++        "env_cfg_entry_point": rm_engineering_reach_env_cfg.RM_Engineering_ReachEnvCfg_PLAY,
++        "rsl_rl_cfg_entry_point": rsl_rl_ppo_cfg.EngineerReachPPORunnerCfg,
++    },
++)
+diff --git a/isaacLab/manipulation/tasks/Robot_arm/reach/config/singleArmRM/rm_engineering_reach_env_cfg.py b/isaacLab/manipulation/tasks/Robot_arm/reach/config/singleArmRM/rm_engineering_reach_env_cfg.py
+index 5841eac..52f4b90 100644
+--- a/isaacLab/manipulation/tasks/Robot_arm/reach/config/singleArmRM/rm_engineering_reach_env_cfg.py
++++ b/isaacLab/manipulation/tasks/Robot_arm/reach/config/singleArmRM/rm_engineering_reach_env_cfg.py
+@@ -3,8 +3,11 @@
+ #
+ # SPDX-License-Identifier: BSD-3-Clause
+ 
+-from isaaclab.managers import SceneEntityCfg
++import math
++from isaaclab.managers import SceneEntityCfg, EventTermCfg, TerminationTermCfg
++from isaaclab.managers import ObservationGroupCfg, ObservationTermCfg, RewardTermCfg
+ from isaaclab.utils import configclass
++from isaaclab.utils.noise import AdditiveUniformNoiseCfg as Unoise
+ 
+ import isaacLab.manipulation.tasks.Robot_arm.reach.mdp as mdp
+ import isaaclab_tasks.manager_based.manipulation.reach.mdp as general_mdp
+@@ -18,26 +21,172 @@ from isaacLab.manipulation.assets.config.version2_engineering import RM26_ENG_CF
+ 
+ @configclass
+ class RM_Engineering_ReachEnvCfg(ReachEnvCfg):
++    """RM26 Engineering Version 2 机械臂reach任务配置
++    
++    目标：控制右臂末端执行器到达指定位姿
++    """
++    
+     def __post_init__(self):
+         # post init of parent
+         super().__post_init__()
+ 
+-        # 1. 使用 V2 机器人配置
++        # ========================================
++        # 1. 场景配置
++        # ========================================
++        # 使用 RM26 V2 机器人配置
+         self.scene.robot = RM26_ENG_CFG.replace(prim_path="{ENV_REGEX_NS}/Robot")
+-
+-        # 2. 配置动作 (只控制右臂关节)
+-        self.actions.arm_action = mdp.JointPositionActionCfg(
++        # 调整环境数量和间距（根据需要调整）
++        self.scene.num_envs = 2048
++        self.scene.env_spacing = 3.0
++        # 调整地面高度，适应工程车
++        self.scene.ground.init_state.pos = (0.0, 0.0, -0.2)
++        
++        # ========================================
++        # 2. 动作配置 - 只控制右臂
++        # ========================================
++        self.actions.arm_action = general_mdp.JointPositionActionCfg(
+             asset_name="robot",
+-            joint_names=["right_j[0-5]", "right_end"],
+-            scale=0.5,
+-            use_default_offset=True,
++            joint_names=["right_j[0-5]", "right_end"],  # 右臂6自由度 + 末端关节
++            scale=0.5,  # 动作缩放系数
++            use_default_offset=True,  # 使用默认位置作为偏移
+         )
++        # 不使用夹爪动作
+         self.actions.gripper_action = None
+ 
+-        # 3. 指定末端执行器 link
++        # ========================================
++        # 3. 命令配置 - 目标位姿生成
++        # ========================================
++        # 指定末端执行器link
+         self.commands.ee_pose.body_name = "right_end_link"
++        # 调整目标位姿范围（根据机械臂工作空间调整）
++        self.commands.ee_pose.ranges.pos_x = (0.3, 0.7)
++        self.commands.ee_pose.ranges.pos_y = (-0.3, 0.3)
++        self.commands.ee_pose.ranges.pos_z = (0.2, 0.6)
++        # 姿态角度范围
++        self.commands.ee_pose.ranges.roll = (-math.pi / 4, math.pi / 4)
++        self.commands.ee_pose.ranges.pitch = (0.0, 0.0)  # 保持水平
++        self.commands.ee_pose.ranges.yaw = (-math.pi, math.pi)
++        # 目标更新频率
++        self.commands.ee_pose.resampling_time_range = (5.0, 5.0)
++        
++        # ========================================
++        # 4. 观测配置 - 强化学习输入
++        # ========================================
++        # 右臂关节位置 (相对于默认位置，7个关节)
++        self.observations.policy.joint_pos = ObservationTermCfg(
++            func=general_mdp.joint_pos_rel, 
++            noise=Unoise(n_min=-0.01, n_max=0.01),
++            params={"asset_cfg": SceneEntityCfg("robot", joint_names=["right_j[0-5]", "right_end"])}
++        )
++        # 右臂关节速度 (7个关节)
++        self.observations.policy.joint_vel = ObservationTermCfg(
++            func=general_mdp.joint_vel_rel, 
++            noise=Unoise(n_min=-0.01, n_max=0.01),
++            params={"asset_cfg": SceneEntityCfg("robot", joint_names=["right_j[0-5]", "right_end"])}
++        )
++        # 目标位姿命令 (7维: 3位置 + 4四元数)
++        self.observations.policy.pose_command = ObservationTermCfg(
++            func=general_mdp.generated_commands, 
++            params={"command_name": "ee_pose"}
++        )
++        # 上一步动作 (7维)
++        self.observations.policy.actions = ObservationTermCfg(
++            func=general_mdp.last_action
++        )
++
++        # ========================================
++        # 5. 奖励配置
++        # ========================================
++        # 位置跟踪误差惩罚（L2范数）
++        self.rewards.end_effector_position_tracking = RewardTermCfg(
++            func=mdp.position_command_error,
++            weight=-0.5,  # 增加权重，更重视位置精度
++            params={
++                "asset_cfg": SceneEntityCfg("robot", body_names=["right_end_link"]), 
++                "command_name": "ee_pose"
++            }
++        )
++        # 位置跟踪奖励（tanh核函数，接近目标时奖励增大）
++        self.rewards.end_effector_position_tracking_fine_grained = RewardTermCfg(
++            func=mdp.position_command_error_tanh,
++            weight=1.0,  # 正奖励
++            params={
++                "asset_cfg": SceneEntityCfg("robot", body_names=["right_end_link"]), 
++                "std": 0.1,  # tanh核函数的标准差
++                "command_name": "ee_pose"
++            }
++        )
++        # 姿态跟踪误差惩罚（四元数误差）
++        self.rewards.end_effector_orientation_tracking = RewardTermCfg(
++            func=mdp.orientation_command_error,
++            weight=-0.2,
++            params={
++                "asset_cfg": SceneEntityCfg("robot", body_names=["right_end_link"]), 
++                "command_name": "ee_pose"
++            }
++        )
++        # 动作变化率惩罚（平滑动作）
++        self.rewards.action_rate = RewardTermCfg(
++            func=general_mdp.action_rate_l2, 
++            weight=-0.001
++        )
++        # 关节速度惩罚（避免过快运动）
++        self.rewards.joint_vel = RewardTermCfg(
++            func=general_mdp.joint_vel_l2,
++            weight=-0.0005,
++            params={"asset_cfg": SceneEntityCfg("robot", joint_names=["right_j[0-5]", "right_end"])}
++        )
++        
++        # ========================================
++        # 6. 终止条件配置
++        # ========================================
++        # 超时终止（基于episode_length_s）
++        self.terminations.time_out = TerminationTermCfg(
++            func=general_mdp.time_out, 
++            time_out=True
++        )
++        
++        # ========================================
++        # 7. 事件配置 - 环境重置
++        # ========================================
++        # 重置时随机化右臂关节位置
++        self.events.reset_robot_joints = EventTermCfg(
++            func=mdp.reset_joints_by_scale,
++            mode="reset",
++            params={
++                "position_range": (0.5, 1.5),  # 相对于默认位置的缩放范围
++                "velocity_range": (0.0, 0.0),   # 速度重置为0
++                "asset_cfg": SceneEntityCfg("robot", joint_names=["right_j[0-5]", "right_end"])
++            },
++        )
++        
++        # ========================================
++        # 8. 环境参数调整
++        # ========================================
++        # 控制频率：60Hz仿真，30Hz控制
++        self.decimation = 2
++        self.sim.dt = 1.0 / 60.0
++        self.sim.render_interval = self.decimation
++        
++        # episode时长
++        self.episode_length_s = 10.0
++        
++        # 相机视角
++        self.viewer.eye = (3.0, 3.0, 2.5)
++        self.viewer.lookat = (0.0, 0.0, 0.5)
++
+ 
+-        # 4. 奖励项绑定末端 link
+-        self.rewards.end_effector_position_tracking.params["asset_cfg"].body_names = ["right_end_link"]
+-        self.rewards.end_effector_position_tracking_fine_grained.params["asset_cfg"].body_names = ["right_end_link"]
+-        self.rewards.end_effector_orientation_tracking.params["asset_cfg"].body_names = ["right_end_link"]
++@configclass
++class RM_Engineering_ReachEnvCfg_PLAY(RM_Engineering_ReachEnvCfg):
++    """用于测试/演示的配置（较少环境数量，无噪声）"""
++    
++    def __post_init__(self):
++        # post init of parent
++        super().__post_init__()
++        
++        # 减少环境数量用于可视化
++        self.scene.num_envs = 50
++        self.scene.env_spacing = 3.0
++        
++        # 禁用观测噪声
++        self.observations.policy.enable_corruption = False
+diff --git a/isaacLab/manipulation/tasks/Robot_arm/reach/mdp/events.py b/isaacLab/manipulation/tasks/Robot_arm/reach/mdp/events.py
+index 6720906..b55b982 100644
+--- a/isaacLab/manipulation/tasks/Robot_arm/reach/mdp/events.py
++++ b/isaacLab/manipulation/tasks/Robot_arm/reach/mdp/events.py
+@@ -20,4 +20,52 @@ if TYPE_CHECKING:
+ 
+ 
+ #class reset_joint(ManagerTermBase):
+- 
++def reset_joints_by_scale(
++    env: ManagerBasedEnv,
++    env_ids: torch.Tensor,
++    position_range: tuple[float, float],
++    velocity_range: tuple[float, float],
++    asset_cfg: SceneEntityCfg = SceneEntityCfg("robot"),
++):
++    """Reset the robot joints by scaling the default joint positions.
++
++    The function samples a random scale from `position_range` and multiplies the default joint positions
++    by this scale. The velocities are sampled from `velocity_range`.
++
++    Args:
++        env: The environment.
++        env_ids: The environment ids.
++        position_range: The range of the scale for the joint positions.
++        velocity_range: The range of the velocity for the joint velocities.
++        asset_cfg: The configuration of the asset.
++    """
++    # extract the used quantities (to enable type-hinting)
++    asset: Articulation = env.scene[asset_cfg.name]
++
++    # resolve keys
++    if asset_cfg.joint_ids is None:
++        joint_ids = slice(None)
++    else:
++        joint_ids = asset_cfg.joint_ids
++
++    # get default joint positions
++    # shape: (num_envs, num_selected_joints)
++    if isinstance(joint_ids, slice):
++        joint_pos = asset.data.default_joint_pos[env_ids, joint_ids].clone()
++        joint_vel = asset.data.default_joint_vel[env_ids, joint_ids].clone()
++    else:
++        # Avoid advanced indexing shape mismatch [N] vs [M]
++        joint_pos = asset.data.default_joint_pos[env_ids][:, joint_ids].clone()
++        joint_vel = asset.data.default_joint_vel[env_ids][:, joint_ids].clone()
++
++    # scale positions
++    scale = sample_uniform(position_range[0], position_range[1], joint_pos.shape, device=env.device)
++    joint_pos[:] = joint_pos * scale
++
++    # scale velocities
++    joint_vel[:] = sample_uniform(velocity_range[0], velocity_range[1], joint_vel.shape, device=env.device)
++
++    # set into the physics simulation
++    asset.write_joint_state_to_sim(joint_pos, joint_vel, env_ids=env_ids, joint_ids=joint_ids)
++
++
+diff --git a/train.sh b/train.sh
+deleted file mode 100644
+index fec3420..0000000
+--- a/train.sh
++++ /dev/null
+@@ -1,2 +0,0 @@
+-
+-python3 scripts/rsl_rl/train.py --task Template-Isaac-Reach-Engineer-v0 --num_envs 256 --headless
