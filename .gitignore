@@ -1,3 +1,11 @@
+# logs
+logs/
+outputs/
+*.log
+*.pt
+wandb/
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

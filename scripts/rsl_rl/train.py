@@ -83,6 +83,34 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
         args_cli.max_iterations if args_cli.max_iterations is not None else agent_cfg.max_iterations
     )
 
+    # Force Weights & Biases logging by default.
+    setattr(agent_cfg, "logger", "wandb")
+    # Remove the custom WANDB_BASE_URL to use official wandb API
+    # os.environ["WANDB_BASE_URL"] = 'https://api.bandw.top'
+
+    # Configure Weights & Biases logging when requested by the runner configuration.
+    if getattr(agent_cfg, "logger", None) == "wandb":
+        # Set wandb entity (your team/username)
+        if not getattr(agent_cfg, "wandb_entity", None):
+            setattr(agent_cfg, "wandb_entity", "yxie667-hkust")
+        
+        # Set wandb project
+        if not getattr(agent_cfg, "wandb_project", None):
+            default_project = (
+                args_cli.log_project_name
+                or agent_cfg.experiment_name
+                or args_cli.task
+                or "rm26"
+            )
+            setattr(agent_cfg, "wandb_project", str(default_project).replace("/", "_"))
+        
+        print(
+            "[INFO] Enabling Weights & Biases logging: "
+            f"entity='{agent_cfg.wandb_entity}', "
+            f"project='{agent_cfg.wandb_project}', "
+            f"run='{agent_cfg.run_name or 'auto'}'"
+        )
+
     # set the environment seed
     # note: certain randomizations occur in the environment initialization so we set the seed here
     env_cfg.seed = agent_cfg.seed
@@ -139,6 +167,12 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
 
     # run training
     runner.learn(num_learning_iterations=agent_cfg.max_iterations, init_at_random_ep_len=True)
+
+    # Finalize wandb run if it was created by the runner.
+    if getattr(agent_cfg, "logger", None) == "wandb" and getattr(runner, "writer", None) is not None:
+        stop_fn = getattr(runner.writer, "stop", None)
+        if callable(stop_fn):
+            stop_fn()
 
     # close the simulator
     env.close()
