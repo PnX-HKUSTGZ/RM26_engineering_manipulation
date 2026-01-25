@@ -20,7 +20,7 @@ gym.register(
     entry_point="isaaclab.envs:ManagerBasedRLEnv",
     disable_env_checker=True,
     kwargs={
-        "env_cfg_entry_point": rm_engineering_reach_env_cfg.RM_Engineering_ReachEnvCfg,
+        "env_cfg_entry_point": rm_engineering_reach_env_cfg.RobotEnvCfg,
         "rsl_rl_cfg_entry_point": rsl_rl_ppo_cfg.EngineerReachPPORunnerCfg,
     },
 )
@@ -30,7 +30,7 @@ gym.register(
     entry_point="isaaclab.envs:ManagerBasedRLEnv",
     disable_env_checker=True,
     kwargs={
-        "env_cfg_entry_point": rm_engineering_reach_env_cfg.RM_Engineering_ReachEnvCfg_PLAY,
+        "env_cfg_entry_point": rm_engineering_reach_env_cfg.RobotPlayEnvCfg,
         "rsl_rl_cfg_entry_point": rsl_rl_ppo_cfg.EngineerReachPPORunnerCfg,
     },
 )
