@@ -5,10 +5,10 @@
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
-import math
+import os
 
 import isaaclab.sim as sim_utils
-from isaaclab.assets import ArticulationCfg, AssetBaseCfg
+from isaaclab.assets import ArticulationCfg, AssetBaseCfg, RigidObjectCfg
 from isaaclab.envs import ManagerBasedRLEnvCfg
 from isaaclab.managers import EventTermCfg as EventTerm
 from isaaclab.managers import ObservationGroupCfg as ObsGroup
@@ -28,6 +28,14 @@ import isaaclab_tasks.manager_based.manipulation.reach.mdp as general_mdp
 ##
 from isaacLab.manipulation.assets.config.version2_engineering import RM26_ENG_CFG
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+CUSTOM_USD_DIR = os.path.abspath(os.path.join(BASE_DIR, "../../../../../assets/usd/custom"))
+RM26_WITH_PEG_USD = os.path.join(CUSTOM_USD_DIR, "rm26_version2_engineering_model_with_peg.usda")
+TARGET_POST_USD = os.path.join(CUSTOM_USD_DIR, "target_post.usda")
+
+PEG_LENGTH_M = 0.15
+TARGET_LENGTH_M = 0.10
+
 
 # -----------------------------------------------------------------------------
 # --- Scene ---
@@ -38,7 +46,43 @@ class RobotSceneCfg(InteractiveSceneCfg):
     """Scene configuration for RM26 engineering reach task (no terrain/teacher)."""
 
     # Robot
-    robot: ArticulationCfg = RM26_ENG_CFG.replace(prim_path="{ENV_REGEX_NS}/Robot")
+    robot: ArticulationCfg = RM26_ENG_CFG.replace(
+        prim_path="{ENV_REGEX_NS}/Robot",
+        spawn=sim_utils.UsdFileCfg(
+            usd_path=RM26_WITH_PEG_USD,
+            rigid_props=sim_utils.RigidBodyPropertiesCfg(
+                disable_gravity=False,
+                retain_accelerations=False,
+                linear_damping=0.0,
+                angular_damping=0.0,
+                max_linear_velocity=1000.0,
+                max_angular_velocity=1000.0,
+                max_depenetration_velocity=1.0,
+            ),
+            articulation_props=sim_utils.ArticulationRootPropertiesCfg(
+                enabled_self_collisions=True,
+                solver_position_iteration_count=4,
+                solver_velocity_iteration_count=0,
+                fix_root_link=True,
+            ),
+        ),
+    )
+
+    # Target post (static)
+    target_post: RigidObjectCfg = RigidObjectCfg(
+        prim_path="{ENV_REGEX_NS}/TargetPost",
+        init_state=RigidObjectCfg.InitialStateCfg(
+            pos=(0.2, -0.2, 0.8),
+            rot=(0.7071068, 0.0, -0.7071068, 0.0),  # +Z -> -X
+        ),
+        spawn=sim_utils.UsdFileCfg(
+            usd_path=TARGET_POST_USD,
+            rigid_props=sim_utils.RigidBodyPropertiesCfg(
+                disable_gravity=True,
+                max_depenetration_velocity=1.0,
+            ),
+        ),
+    )
 
     # Simple ground (keep it minimal; adjust z to fit your platform)
     ground = AssetBaseCfg(
@@ -80,30 +124,8 @@ class EventCfg:
 
 @configclass
 class CommandsCfg:
-    """Command specifications for the MDP.
-
-    This task uses an end-effector pose command named 'ee_pose'.
-    """
-
-    # NOTE: API compatibility guard (keeps file importable across versions).
-    if hasattr(general_mdp, "UniformPoseCommandCfg"):
-        ee_pose = general_mdp.UniformPoseCommandCfg(
-            asset_name="robot",
-            body_name="right_end_link",
-            resampling_time_range=(5.0, 5.0),
-            ranges=general_mdp.UniformPoseCommandCfg.Ranges(
-                pos_x=(0.3, 0.7),
-                pos_y=(-0.3, 0.3),
-                pos_z=(0.2, 0.6),
-                roll=(-math.pi / 4, math.pi / 4),
-                pitch=(0.0, 0.0),  # keep level
-                yaw=(-math.pi, math.pi),
-            ),
-        )
-    else:
-        # TODO: Replace with the correct pose-command cfg for your IsaacLab version.
-        # For example: general_mdp.PoseCommandCfg / mdp.UniformPoseCommandCfg / etc.
-        ee_pose = None
+    """Command specifications for the MDP (unused for insertion task)."""
+    pass
 
 
 # -----------------------------------------------------------------------------
@@ -129,7 +151,7 @@ class ActionsCfg:
 # -----------------------------------------------------------------------------
 # --- Observations ---
 # -----------------------------------------------------------------------------
-
+    
 @configclass
 class ObservationsCfg:
     """Observation specifications for the MDP."""
@@ -153,9 +175,14 @@ class ObservationsCfg:
         )
 
         # Pose command (typically 7D: pos(3) + quat(4), depending on command implementation)
-        pose_command = ObsTerm(
-            func=general_mdp.generated_commands,
-            params={"command_name": "ee_pose"},
+        ee_pose = ObsTerm(
+            func=mdp.ee_pose_w,
+            params={"asset_cfg": SceneEntityCfg("robot", body_names=["right_end_link"])},
+        )
+
+        target_pose = ObsTerm(
+            func=mdp.target_pose_w,
+            params={"asset_cfg": SceneEntityCfg("target_post", body_names="TargetPost")},
         )
 
         # Last action
@@ -180,31 +207,46 @@ class ObservationsCfg:
 class RewardsCfg:
     """Reward terms for the MDP."""
 
-    end_effector_position_tracking = RewTerm(
-        func=mdp.position_command_error,
-        weight=-0.5,
+    axis_alignment = RewTerm(
+        func=mdp.axis_alignment_error,
+        weight=-1.0,
         params={
-            "asset_cfg": SceneEntityCfg("robot", body_names=["right_end_link"]),
-            "command_name": "ee_pose",
+            "ee_cfg": SceneEntityCfg("robot", body_names=["right_end_link"]),
+            "target_cfg": SceneEntityCfg("target_post", body_names="TargetPost"),
         },
     )
 
-    end_effector_position_tracking_fine_grained = RewTerm(
-        func=mdp.position_command_error_tanh,
-        weight=1.0,
+    radial_distance = RewTerm(
+        func=mdp.radial_distance_to_axis,
+        weight=-2.0,
         params={
-            "asset_cfg": SceneEntityCfg("robot", body_names=["right_end_link"]),
-            "std": 0.1,
-            "command_name": "ee_pose",
+            "ee_cfg": SceneEntityCfg("robot", body_names=["right_end_link"]),
+            "target_cfg": SceneEntityCfg("target_post", body_names="TargetPost"),
         },
     )
 
-    end_effector_orientation_tracking = RewTerm(
-        func=mdp.orientation_command_error,
-        weight=-0.2,
+    insertion_depth = RewTerm(
+        func=mdp.insertion_depth,
+        weight=3.0,
         params={
-            "asset_cfg": SceneEntityCfg("robot", body_names=["right_end_link"]),
-            "command_name": "ee_pose",
+            "ee_cfg": SceneEntityCfg("robot", body_names=["right_end_link"]),
+            "target_cfg": SceneEntityCfg("target_post", body_names="TargetPost"),
+            "peg_length": PEG_LENGTH_M,
+            "target_length": TARGET_LENGTH_M,
+        },
+    )
+
+    insertion_success_bonus = RewTerm(
+        func=mdp.insertion_success,
+        weight=10.0,
+        params={
+            "ee_cfg": SceneEntityCfg("robot", body_names=["right_end_link"]),
+            "target_cfg": SceneEntityCfg("target_post", body_names="TargetPost"),
+            "peg_length": PEG_LENGTH_M,
+            "target_length": TARGET_LENGTH_M,
+            "max_angle_deg": 5.0,
+            "max_radial": 0.003,
+            "min_depth": 0.06,
         },
     )
 
@@ -226,6 +268,19 @@ class TerminationsCfg:
     """Termination terms for the MDP."""
 
     time_out = DoneTerm(func=general_mdp.time_out, time_out=True)
+
+    insertion_success = DoneTerm(
+        func=mdp.insertion_success,
+        params={
+            "ee_cfg": SceneEntityCfg("robot", body_names=["right_end_link"]),
+            "target_cfg": SceneEntityCfg("target_post", body_names="TargetPost"),
+            "peg_length": PEG_LENGTH_M,
+            "target_length": TARGET_LENGTH_M,
+            "max_angle_deg": 5.0,
+            "max_radial": 0.003,
+            "min_depth": 0.06,
+        },
+    )
 
 
 # -----------------------------------------------------------------------------

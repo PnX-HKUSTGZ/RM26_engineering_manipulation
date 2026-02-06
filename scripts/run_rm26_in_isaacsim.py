@@ -9,7 +9,8 @@ import os
 import sys
 
 # ———————— 配置部分 ————————
-USD_PATH = "/home/cytochrome/RM26_engineering_manipulation/isaacLab/manipulation/assets/usd/rm26_version2_engineering_model/rm26_version2_engineering_model.usd"
+#USD_PATH = "/home/cytochrome/RM26_engineering_manipulation/isaacLab/manipulation/assets/usd/rm26_version2_engineering_model/rm26_version2_engineering_model.usd"
+USD_PATH = "/home/cytochrome/RM26_engineering_manipulation/logs/rsl_rl/reach_engineer/panda_instanceable.usd"
 # ————————————————————————
 
 # 检查 USD 文件路径

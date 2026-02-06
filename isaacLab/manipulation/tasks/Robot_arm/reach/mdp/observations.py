@@ -3,17 +3,25 @@
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
-"""Functions specific to the in-hand dexterous manipulation environments."""
+"""Observation helpers for the RM26 insertion task."""
 
 import torch
 from typing import TYPE_CHECKING
 
-import isaaclab.utils.math as math_utils
 from isaaclab.assets import RigidObject
-from isaaclab.envs import ManagerBasedRLEnv
 from isaaclab.managers import SceneEntityCfg
 
 if TYPE_CHECKING:
-    from .commands import YourCommand
+    from isaaclab.envs import ManagerBasedRLEnv
 
-#def
+
+def ee_pose_w(env: "ManagerBasedRLEnv", asset_cfg: SceneEntityCfg) -> torch.Tensor:
+    """End-effector pose in world frame as (x, y, z, w, x, y, z)."""
+    asset = env.scene[asset_cfg.name]
+    return asset.data.body_state_w[:, asset_cfg.body_ids[0], :7]  # type: ignore
+
+
+def target_pose_w(env: "ManagerBasedRLEnv", asset_cfg: SceneEntityCfg) -> torch.Tensor:
+    """Target post pose in world frame as (x, y, z, w, x, y, z)."""
+    asset: RigidObject = env.scene[asset_cfg.name]
+    return asset.data.root_state_w[:, :7]

@@ -1,0 +1,23 @@
+#usda 1.0
+(
+    defaultPrim = "Robot"
+)
+
+over "Robot" (
+    prepend references = @../rm26_version2_engineering_model/rm26_version2_engineering_model.usd@
+)
+{
+    over "right_end_link"
+    {
+        def Xform "peg_tube"
+        {
+            double3 xformOp:translate = (0, 0, 0.075000)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            def Xform "mesh" (
+                prepend references = @./peg_tube.usda@
+            )
+            {
+            }
+        }
+    }
+}

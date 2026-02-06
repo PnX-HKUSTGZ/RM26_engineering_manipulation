@@ -13,12 +13,15 @@ mkdir -p outputs
 
 # python scripts/rsl_rl/train.py --log_project_name rm26 \
 #     --task "Template-Isaac-Reach-RM26-v0" \
-#     --num_envs 2048 \
-#     --max_iterations 3000 \
+#     --num_envs 256 \
+#     --max_iterations 5000 \
 #     --seed 42 \
 #     --headless \
-    /
-python scripts/rsl_rl/play.py --task Template-Isaac-Reach-RM26-Play-v0 --checkpoint model_2999.pt
+    
+python scripts/rsl_rl/play.py --task "Template-Isaac-Reach-RM26-v0" --num_envs 2
+
+
+# python scripts/rsl_rl/play.py --task Template-Isaac-Reach-RM26-Play-v0 --checkpoint model_2999.pt
 
     "$@"
 
